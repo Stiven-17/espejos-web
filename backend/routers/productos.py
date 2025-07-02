@@ -4,10 +4,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import base64
 import logging
-from models import Producto as ModelProducto
-from schemas import ProductoInDB, ProductoCreate, ProductoUpdate, SuccessResponse, ErrorResponse
-from auth import get_current_admin
-from database import get_db
+from backend.models import Producto as ModelProducto
+from backend.schemas import ProductoInDB, ProductoCreate, ProductoUpdate, SuccessResponse, ErrorResponse
+from backend.auth import get_current_admin
+from backend.database import get_db
 
 # Configurar logging
 logger = logging.getLogger(__name__)

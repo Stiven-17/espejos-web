@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import models
-from schemas import OfertaCreate, OfertaUpdate, OfertaInDB
-from auth import get_current_admin
-from database import get_db
+from backend.schemas import OfertaCreate, OfertaUpdate, OfertaInDB
+from backend.auth import get_current_admin
+from backend.database import get_db
 import logging
 
 router = APIRouter()

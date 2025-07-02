@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Annotated
 
-from database import get_db
-from schemas import Token
-from auth import (
+from backend.database import get_db
+from backend.schemas import Token
+from backend.auth import (
     authenticate_admin,
     create_access_token,
     get_current_admin
