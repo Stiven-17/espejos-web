@@ -5,9 +5,9 @@ from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi import HTTPException
 from dotenv import load_dotenv
-from database import engine
-from models import Base
-from routers import auth, productos, ofertas, compras
+from backend.database import engine
+from backend.models import Base
+from backend.routers import auth, productos, ofertas, compras
 import logging
 from pathlib import Path
 
