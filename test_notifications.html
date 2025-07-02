@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Notificaciones</title>
+    <link rel="stylesheet" href="frontend/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .test-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-btn.success { background-color: #28a745; color: white; }
+        .test-btn.error { background-color: #dc3545; color: white; }
+        .test-btn.warning { background-color: #ffc107; color: #212529; }
+        .test-btn.info { background-color: #17a2b8; color: white; }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1><i class="fas fa-bell"></i> Prueba de Sistema de Notificaciones</h1>
+        <p>Este archivo permite probar el sistema de notificaciones toast implementado en la aplicación.</p>
+        
+        <div class="test-buttons">
+            <button class="test-btn success" onclick="testSuccess()">
+                <i class="fas fa-check"></i> Éxito
+            </button>
+            <button class="test-btn error" onclick="testError()">
+                <i class="fas fa-times"></i> Error
+            </button>
+            <button class="test-btn warning" onclick="testWarning()">
+                <i class="fas fa-exclamation-triangle"></i> Advertencia
+            </button>
+            <button class="test-btn info" onclick="testInfo()">
+                <i class="fas fa-info-circle"></i> Información
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+            <h3>Instrucciones:</h3>
+            <ul>
+                <li>Haz clic en cualquier botón para probar las notificaciones</li>
+                <li>Las notificaciones aparecerán en la esquina superior derecha</li>
+                <li>Se cerrarán automáticamente después de 5 segundos</li>
+                <li>Puedes cerrarlas manualmente haciendo clic en la X</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Contenedor de notificaciones toast -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        // Sistema de notificaciones toast (copiado del script principal)
+        const Toast = {
+            show: function(type, title, message, duration = 5000) {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    error: 'fas fa-exclamation-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    info: 'fas fa-info-circle'
+                };
+                
+                toast.innerHTML = `
+                    <i class="toast-icon ${icons[type]}"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button class="toast-close" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                document.getElementById('toastContainer').appendChild(toast);
+                
+                // Animación de entrada
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+                
+                // Auto-remover después del tiempo especificado
+                if (duration > 0) {
+                    setTimeout(() => {
+                        this.hide(toast);
+                    }, duration);
+                }
+                
+                return toast;
+            },
+            
+            hide: function(toast) {
+                toast.classList.remove('show');
+                toast.classList.add('slide-out');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.parentElement.removeChild(toast);
+                    }
+                }, 300);
+            },
+            
+            success: function(title, message, duration) {
+                return this.show('success', title, message, duration);
+            },
+            
+            error: function(title, message, duration) {
+                return this.show('error', title, message, duration);
+            },
+            
+            warning: function(title, message, duration) {
+                return this.show('warning', title, message, duration);
+            },
+            
+            info: function(title, message, duration) {
+                return this.show('info', title, message, duration);
+            }
+        };
+
+        // Funciones de prueba
+        function testSuccess() {
+            Toast.success(
+                'Operación Exitosa',
+                'El producto se ha guardado correctamente en la base de datos.',
+                4000
+            );
+        }
+
+        function testError() {
+            Toast.error(
+                'Error de Conexión',
+                'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
+                6000
+            );
+        }
+
+        function testWarning() {
+            Toast.warning(
+                'Advertencia',
+                'Algunos campos están incompletos. Revisa la información antes de continuar.',
+                5000
+            );
+        }
+
+        function testInfo() {
+            Toast.info(
+                'Información',
+                'Los cambios se guardarán automáticamente cuando cierres el formulario.',
+                3500
+            );
+        }
+    </script>
+</body>
+</html> 

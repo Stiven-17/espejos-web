@@ -1,22 +1,36 @@
 from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
 import os
 
-# Ruta absoluta para evitar problemas
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SQLALCHEMY_DATABASE_URL = "sqlite:///../../sql_app.db"
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-try:
-    engine = create_engine(
-        SQLALCHEMY_DATABASE_URL,
-        connect_args={"check_same_thread": False},
-        pool_pre_ping=True  # Verifica conexión antes de usarla
-    )
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    Base = declarative_base()
-    print("Conexión a la base de datos establecida correctamente")
-except SQLAlchemyError as e:
-    print(f"Error al conectar a la base de datos: {e}")
-    raise
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"sslmode": "require"},
+    pool_pre_ping=True,
+    pool_size=10,           # Tamaño del pool de conexiones
+    max_overflow=20,        # Conexiones extra permitidas
+    pool_timeout=30,        # Tiempo de espera para obtener conexión
+    pool_recycle=1800       # Reciclar conexiones cada 30 minutos
+)
+
+print("DEBUG - DATABASE_URL:", DATABASE_URL)  # Este debe imprimir tu URL
+
+if DATABASE_URL is None:
+    raise ValueError("DATABASE_URL no se ha cargado. Revisa tu archivo .env")
+
+
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

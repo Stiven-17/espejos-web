@@ -1,28 +1,32 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
-from jose import JWTError, jwt
-from sqlalchemy.orm import Session
-from . import crud, database
-from backend.models import Admin
+from datetime import datetime, timedelta
+from typing import Optional
 
-# Configuración
-SECRET_KEY = "supersecretkey"
+from fastapi import Depends, HTTPException, status
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
+from database import get_db
+from models import Admin
+
+# Configuración del token
+SECRET_KEY = "supersecretkey"  # 🔐 Cambia esto por una segura y guárdala en .env
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-# Contexto para contraseñas
+# Contexto de encriptación
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-# Funciones auxiliares
-def verify_password(plain_password, hashed_password):
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-def get_password_hash(password):
+
+def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
-def authenticate_admin(db: Session, email: str, password: str):
+
+def authenticate_admin(db: Session, email: str, password: str) -> Optional[Admin]:
     admin = db.query(Admin).filter(Admin.email == email).first()
     if not admin:
         return None
@@ -30,18 +34,24 @@ def authenticate_admin(db: Session, email: str, password: str):
         return None
     return admin
 
-def create_access_token(data: dict):
-    from datetime import datetime, timedelta
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# Aquí está la corrección principal:
-def get_current_admin(token: str = Depends(oauth2_scheme), db=Depends(database.SessionLocal)):
+
+# DEPENDENCIA PARA PROTEGER RUTAS
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
+
+
+def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> Admin:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="No se pudieron validar las credenciales",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
@@ -51,7 +61,8 @@ def get_current_admin(token: str = Depends(oauth2_scheme), db=Depends(database.S
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    admin = crud.get_admin_by_email(db, email)
+
+    admin = db.query(Admin).filter(Admin.email == email).first()
     if admin is None:
         raise credentials_exception
     return admin

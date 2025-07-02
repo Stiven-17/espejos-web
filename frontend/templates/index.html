@@ -6,30 +6,32 @@
   <meta name="description" content="Espejos decorativos en Valledupar">
   <meta name="keywords" content="espejos, decoración, Valledupar">
   <title>La galería del espejo en Valledupar</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/script.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="/js/script.js" defer></script>
 </head>
 <body>
 <header class="navbar">
-    <div class="logo">
-        <a href="/" class="logo-link">
-            <i class="fas fa-mirror"></i>
-            <span>La Galería del Espejo</span>
-        </a>
-    </div>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
-      <i class="fas fa-bars"></i>
-    </button>
-    <nav id="nav">
-      <ul>
-        <li><a href="#productos"><i class="fas fa-store-alt"></i> Productos</a></li>
-        <li><a href="#ofertas"><i class="fas fa-tag"></i> Ofertas</a></li>
-        <li><a href="#testimonios"><i class="fas fa-users"></i> Clientes</a></li>
-        <li><a href="#contacto"><i class="fas fa-phone-alt"></i> Contacto</a></li>
-        <li><a href="#" id="adminBtn" class="btn-confirmar"><i class="fas fa-user-shield"></i> Admin</a></li>
-      </ul>
-    </nav>
+  <div class="logo">
+    <a href="/" class="logo-link">
+      <i class="fas fa-mirror"></i>
+      <span>La Galería del Espejo</span>
+    </a>
+  </div>
+  <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+  </button>
+  <nav id="nav" class="nav-menu">
+    <ul>
+      <li><a href="#productos"><i class="fas fa-store-alt"></i> Productos</a></li>
+      <li><a href="#ofertas"><i class="fas fa-tag"></i> Ofertas</a></li>
+      <li><a href="#contacto"><i class="fas fa-phone-alt"></i> Contacto</a></li>
+      <li><a href="#" id="adminBtn"><i class="fas fa-user-shield"></i> Admin</a></li>
+    </ul>
+  </nav>
 </header>
 
 <!-- Carrusel de Ofertas -->
@@ -63,7 +65,9 @@
 <!-- Catálogo -->
 <section id="productos" class="contenedor-productos">
   <h2><i class="fas fa-mirror"></i> Catálogo de Espejos</h2>
-  <!-- Aquí los productos se cargarán dinámicamente -->
+  <div id="productos-container" class="contenedor-productos">
+    <!-- Aquí los productos se cargarán dinámicamente -->
+  </div>
 </section>
 
 <!-- Modal de Compra -->
@@ -71,7 +75,7 @@
     <div class="modal-contenido">
         <div class="modal-header">
             <h2><i class="fas fa-shopping-cart"></i> Completa tu pedido</h2>
-            <span class="cerrar-modal-compra">&times;</span>
+            <span class="cerrar-modal">&times;</span>
         </div>
         <form id="formCompra">
             <div class="form-group">
@@ -98,7 +102,7 @@
         <label for="pago"><i class="fas fa-money-bill-wave"></i> Método de pago:</label>
         <select id="pago" name="pago" required>
           <option value="Nequi">Nequi</option>
-          <option value="Daviplata">Cotizacion</option>
+          <option value="Quiero Cotizar">Cotizacion</option>
           <option value="Efectivo">Pago contra entrega</option>
         </select>
       </div>
@@ -150,87 +154,94 @@
         <button class="cerrar-panel-admin">&times;</button>
     </div>
     <div class="admin-tabs">
-        <button class="admin-tab active" data-tab="productos">Productos</button>
-        <button class="admin-tab" data-tab="ofertas">Ofertas</button>
+        <button id="productosTab" class="admin-tab active">Productos</button>
+        <button id="ofertasTab" class="admin-tab">Ofertas</button>
     </div>
     <div class="admin-content">
-        <div id="productosTab" class="admin-tab-content active">
+        <div id="productosTabContent" class="admin-tab-content active">
+            <div class="admin-header">
+          <h3><i class="fas fa-store-alt"></i> Gestión de Productos</h3>
             <button id="addProductBtn" class="btn-agregar">
-                <i class="fas fa-plus"></i> Agregar Espejo
+                <i class="fas fa-plus"></i>Nuevo Espejo
             </button>
-            <div id="productosList" class="productos-lista">
-                <!-- Aquí se cargarán los productos -->
+            </div>
+            <div id="productosTabContent" class="productos-lista">
+                <table style="width:100%"><tbody></tbody></table>
             </div>
         </div>
-        <div id="ofertasTab" class="admin-tab-content">
-      <div class="admin-header">
-        <h3><i class="fas fa-tag"></i> Gestión de Ofertas</h3>
-        <button id="addOfertaBtn" class="btn-agregar">+ Nueva Oferta</button>
-      </div>
-      <div id="ofertasList" class="ofertas-list">
-        <!-- Las ofertas se cargarán aquí dinámicamente -->
-      </div>
-    </div>
+        <div id="ofertasTabContent" class="admin-tab-content">
+            <div class="admin-header">
+                <h3><i class="fas fa-tag"></i> Gestión de Ofertas</h3>
+                <button id="addOfertaBtn" class="btn-agregar">
+                  <i class="fas fa-plus"></i>Nueva Oferta
+              </button>
+            </div>
+            <div id="ofertasTabContent" class="ofertas-list">
+                <table style="width:100%"><tbody></tbody></table>
+            </div>
+        </div>
     </div>
   </div>
 
 <!-- Modal de producto -->
 <div id="productModal" class="modal">
-    <div class="modal-contenido">
-        <span class="cerrar-product-modal">&times;</span>
-        <h2 id="productModalTitle">Nuevo Espejo</h2>
-        <form id="productForm" enctype="multipart/form-data">
+    <div class="modal-contenido editar-espejo">
+        <div class="modal-header">
+            <h2>Editar Espejo</h2>
+            <span class="cerrar-modal">&times;</span>
+        </div>
+        <form id="productForm" class="form-editar-espejo">
             <input type="hidden" id="productId" name="id">
             <div class="form-group">
-        <label for="productName">Nombre:</label>
-        <input type="text" id="productName" name="nombre" required>
-      </div>
-      <div class="form-group">
-        <label for="productDesc">Descripción:</label>
-        <textarea id="productDesc" name="descripcion" required></textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="productPriceWith">Precio con montura:</label>
-          <input type="text" id="productPriceWith" name="precio_montura" required>
-        </div>
-        <div class="form-group">
-          <label for="productPriceWithout">Precio sin montura:</label>
-          <input type="text" id="productPriceWithout" name="precio_sin_montura" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="productWidth">Ancho (cm):</label>
-          <input type="text" id="productWidth" name="ancho">
-        </div>
-        <div class="form-group">
-          <label for="productHeight">Largo (cm):</label>
-          <input type="text" id="productHeight" name="largo">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="productCategory">Categoría:</label>
-        <select id="productCategory" name="categoria" required>
-          <option value="banos">Baños</option>
-          <option value="sala">Sala</option>
-          <option value="alcoba">Alcoba</option>
-          <option value="con-luces">Con luces</option>
-          <option value="adornos">Adornos</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="productBadge">Badge (Opcional):</label>
-        <input type="text" id="productBadge" name="badge">
-      </div>
-      <div class="form-group">
-        <label for="productImages">Imágenes:</label>
-        <input type="file" id="productImages" name="imagenes" multiple accept="image/*">
-        <div id="productImagesPreview" class="images-preview"></div>
-      </div>
-      <div class="form-actions">
-                <button type="submit" class="btn-guardar">Guardar</button>
-                <button type="button" class="btn-cancelar cerrar-product-modal">Cancelar</button>
+                <label for="productName">Nombre:</label>
+                <input type="text" id="productName" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="productDesc">Descripción:</label>
+                <textarea id="productDesc" name="descripcion" required></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productPriceWith">Precio con instalación:</label>
+                    <input type="text" id="productPriceWith" name="precio_montura" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPriceWithout">Precio sin instalación:</label>
+                    <input type="text" id="productPriceWithout" name="precio_sin_montura" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productWidth">Ancho (cm):</label>
+                    <input type="text" id="productWidth" name="ancho">
+                </div>
+                <div class="form-group">
+                    <label for="productHeight">Largo (cm):</label>
+                    <input type="text" id="productHeight" name="largo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="productCategory">Categoría:</label>
+                <select id="productCategory" name="categoria" required>
+                    <option value="banos">Baños</option>
+                    <option value="sala">Sala</option>
+                    <option value="alcoba">Alcoba</option>
+                    <option value="con-luces">Con luces</option>
+                    <option value="adornos">Adornos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="productBadge">Badge (Opcional):</label>
+                <input type="text" id="productBadge" name="badge">
+            </div>
+            <div class="form-group">
+                <label for="productImages">Imágenes:</label>
+                <input type="file" id="productImages" name="imagen" accept="image/*">
+                <div id="productImagesPreview" class="images-preview"></div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-confirmar">Guardar</button>
+                <button type="button" class="btn-cancelar">Cancelar</button>
             </div>
         </form>
     </div>
@@ -239,7 +250,7 @@
 <!-- Modal de oferta -->
 <div id="ofertaModal" class="modal">
     <div class="modal-contenido">
-        <span class="cerrar-oferta-modal">&times;</span>
+        <span class="cerrar-modal">&times;</span>
         <div class="modal-header">
       <h2 id="ofertaModalTitle">Nueva Oferta</h2>
     </div>
@@ -270,17 +281,109 @@
   <div class="footer-content">
     <div class="footer-section">
       <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
-      <p>📍 Entregamos exclusivamente en Valledupar, Cesar</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="contact-text">
+            <div class="contact-label">Ciudad</div>
+            <div class="contact-value">Valledupar, Cesar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-info-circle"></i>
+          <div class="contact-text">
+            <div class="contact-label">Cobertura</div>
+            <div class="contact-value">Entregas exclusivas en Valledupar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-truck"></i>
+          <div class="contact-text">
+            <div class="contact-label">Otras localidades</div>
+            <div class="contact-value">Cotizar precios especiales</div>
+          </div>
+        </div>
+      </div>
     </div>
+    
     <div class="footer-section">
       <h3><i class="fas fa-phone-alt"></i> Contacto</h3>
-      <p>WhatsApp: <a href="https://wa.me/573053646901" target="_blank">+57 305 3646901</a></p>
-      <h4><i class="fas fa-phone-alt"></i> Desarrollador web</h4>
-      <p>WhatsApp: <a href="https://wa.me/573053646901" target="_blank">+57 305 3646901</a></p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fab fa-whatsapp"></i>
+          <div class="contact-text">
+            <div class="contact-label">WhatsApp Principal</div>
+            <div class="contact-value">Juan Carlos</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fab fa-whatsapp"></i>
+          <div class="contact-text">
+            <div class="contact-label">WhatsApp Alternativo</div>
+            <div class="contact-value">Mayra Gutierrez</div>
+          </div>
+        </div>
+      </div>
+      
+      <h4><i class="fas fa-code"></i> Desarrollador Web</h4>
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fab fa-linkedin"></i>
+          <div class="contact-text">
+            <div class="contact-label">Contratar Desarrollo</div>
+            <div class="contact-value">Joel Perez</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-section">
+      <h3><i class="fas fa-share-alt"></i> Redes Sociales</h3>
+      <div class="social-links">
+        <a href="https://wa.me/573053646901" class="social-link whatsapp" target="_blank" title="WhatsApp Juan Carlos">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://wa.me/573166153734" class="social-link whatsapp" target="_blank" title="WhatsApp Mayra">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.facebook.com/juan.carlos.martinez.manjarrez.2025/?locale=es_LA" class="social-link facebook" target="_blank" title="Facebook Juan Carlos">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/juancarlosmartinezmanjarrez?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="social-link instagram" target="_blank" title="Instagram Juan Carlos">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/joel-p%C3%A9rez-23b179286/" class="social-link linkedin" target="_blank" title="LinkedIn Joel Perez">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </div>
+      
+      <div class="contact-info" style="margin-top: 1.5rem;">
+        <a href="https://wa.me/573053646901" target="_blank" style="margin-bottom: 0.5rem;">
+          <i class="fab fa-whatsapp"></i>
+          WhatsApp: Juan Carlos
+        </a>
+        <a href="https://wa.me/573166153734" target="_blank" style="margin-bottom: 0.5rem;">
+          <i class="fab fa-whatsapp"></i>
+          WhatsApp: Mayra Gutierrez
+        </a>
+        <a href="https://www.facebook.com/juan.carlos.martinez.manjarrez.2025/?locale=es_LA" target="_blank" style="margin-bottom: 0.5rem;">
+          <i class="fab fa-facebook"></i>
+          Facebook: Juan Carlos
+        </a>
+        <a href="https://www.instagram.com/juancarlosmartinezmanjarrez?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="margin-bottom: 0.5rem;">
+          <i class="fab fa-instagram"></i>
+          Instagram: Juan Carlos
+        </a>
+        <a href="https://www.linkedin.com/in/joel-p%C3%A9rez-23b179286/" target="_blank">
+          <i class="fab fa-linkedin"></i>
+          Contratar: Joel Perez
+        </a>
+      </div>
     </div>
   </div>
+  
   <div class="footer-bottom">
-    <p>&copy; 2025 La galería del espejo - Todos los derechos reservados</p>
+    <p>&copy; 2025 La Galería del Espejo - Todos los derechos reservados</p>
   </div>
 </footer>
 
@@ -288,6 +391,9 @@
 <a href="https://wa.me/573053646901" class="whatsapp-float" target="_blank">
   <i class="fab fa-whatsapp"></i>
 </a>
+
+<!-- Contenedor de notificaciones toast -->
+<div id="toastContainer" class="toast-container"></div>
 
   <!-- Modal de confirmación -->
   <div id="modal" class="modal">
@@ -300,5 +406,7 @@
       </a>
     </div>
   </div>
+
+<img src="/static/img/favicon.ico" loading="lazy" alt="favicon" style="display:none;">
 </body>
 </html>

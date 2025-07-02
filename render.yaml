@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: backend-espejos
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "./start.sh"
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_D1s6bStlnEZK@ep-purple-waterfall-a8n22jtt-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
+      - key: SECRET_KEY
+        value: "STIVEN.,1823"
+    plan: free
