@@ -6,8 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from database import get_db
-from models import Admin
+from backend.database import get_db
+from backend.models import Admin
 
 # Configuración del token
 SECRET_KEY = "supersecretkey"  # 🔐 Cambia esto por una segura y guárdala en .env

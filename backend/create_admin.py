@@ -1,6 +1,6 @@
 # backend/create_admin.py
-from database import Base, engine, SessionLocal
-from models import Admin
+from backend.database import Base, engine, SessionLocal
+from backend.models import Admin
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

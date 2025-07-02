@@ -2,7 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-import models
+import backend.models as models
 from backend.schemas import OfertaCreate, OfertaUpdate, OfertaInDB
 from backend.auth import get_current_admin
 from backend.database import get_db

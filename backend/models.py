@@ -1,7 +1,7 @@
 # backend/models.py
 from sqlalchemy import Column, Integer, String, Text, DateTime, Numeric, LargeBinary
 from datetime import datetime
-from database import Base  
+from backend.database import Base  
 
 class Admin(Base):
     __tablename__ = "admins"

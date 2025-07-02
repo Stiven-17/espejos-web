@@ -1,6 +1,6 @@
 # backend/crud.py
 from sqlalchemy.orm import Session
-import models
+import backend.models as models
 import json
 
 def get_admin_by_email(db: Session, email: str):

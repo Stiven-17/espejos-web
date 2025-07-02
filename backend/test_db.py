@@ -1,5 +1,5 @@
 # test_db.py
-from database import engine
+from backend.database import engine
 
 try:
     conn = engine.connect()
