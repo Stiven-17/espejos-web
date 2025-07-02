@@ -54,7 +54,7 @@ app.add_middleware(
 )
 
 # Configuración de rutas estáticas
-frontend_path = Path(__file__).parent.parent / "frontend"
+frontend_path = Path(__file__).parent / "frontend"
 app.mount("/static", StaticFiles(directory=frontend_path / "static"), name="static")
 app.mount("/templates", StaticFiles(directory=frontend_path / "templates"), name="templates")
 
